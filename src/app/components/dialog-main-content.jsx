@@ -59,8 +59,10 @@ export default function DialogMainContent(){
     const [role, setRole] = useState("Consumer");
     const [address, setAddress] = useState("");
     const router = useRouter();
+    const [isLoading, setLoading] = useState(false);
 
     async function connectWallet(){
+      setLoading(true);
         const {signer, walletId} = await connectMetamask();
         setAddress(walletId);
         
@@ -80,6 +82,7 @@ export default function DialogMainContent(){
             console.log("Verification failed");
           }
         }
+      setLoading(false)
     }
 
     return (
@@ -89,7 +92,15 @@ export default function DialogMainContent(){
                 <option value="Consumer">Consumer</option>
                 <option value="GasAdmin">Gas Admin</option>
               </select>
-            <Button onClick={connectWallet} className="bg-black text-white hover:bg-zinc-900 cursor-pointer">Connect to Wallet</Button>
+              {
+                isLoading ? 
+                <Button  className="bg-black text-white hover:bg-zinc-900 cursor-pointer">
+                  <div className="w-5 h-5 rounded-full border-b-2 border-blue-500 animate-spin"></div>
+                  {" "}Connecting....
+                </Button>
+                :
+                <Button onClick={connectWallet} className="bg-black text-white hover:bg-zinc-900 cursor-pointer">Connect to Wallet</Button>
+              }
         </div>
         
     )

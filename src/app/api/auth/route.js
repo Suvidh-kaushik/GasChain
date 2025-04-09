@@ -23,16 +23,16 @@ export async function GET(req){
         console.log("Nonce: " + nonce);
         let user;
         if(role == "Consumer"){
-            user = await prisma.consumer.upsert({
-                where: {walletId},
-                create: {walletId, nonce},
+            user = await prisma.customer.upsert({
+                where: {wallet: walletId},
+                create: {wallet: walletId, nonce},
                 update: {nonce},
             });
         }
         else if(role == "GasAdmin"){
-            user = await prisma.gasadmin.upsert({
-                where: {walletId},
-                create: {walletId, nonce},
+            user = await prisma.admin.upsert({
+                where: {wallet: walletId},
+                create: {wallet: walletId, nonce},
                 update: {nonce},
             });
         }
@@ -61,9 +61,17 @@ export async function POST(req){
     const {signature, walletId, role} = await req.json();
     console.log("Server: " + walletId);
     try{
-        const user = await prisma.consumer.findUnique({
-            where: {walletId},
-        });
+        let user;
+        if(role == "Consumer"){
+            user = await prisma.customer.findUnique({
+                where: {wallet: walletId},
+            });
+        }
+        else if(role == "GasAdmin"){
+            user = await prisma.admin.findUnique({
+                where: {wallet: walletId},
+            });
+        }
         console.log(user);
         const isVerified = verifySignature(signature, user.nonce, walletId);
         if(isVerified){
