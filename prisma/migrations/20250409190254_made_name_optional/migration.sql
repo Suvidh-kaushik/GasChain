@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Admin" ALTER COLUMN "firstName" DROP NOT NULL,
+ALTER COLUMN "lastName" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Customer" ALTER COLUMN "firstName" DROP NOT NULL,
+ALTER COLUMN "lastName" DROP NOT NULL,
+ALTER COLUMN "ipfsHash" DROP NOT NULL;

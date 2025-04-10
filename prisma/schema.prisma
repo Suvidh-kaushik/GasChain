@@ -16,26 +16,32 @@ datasource db {
 
 model Customer{
   id String @unique @default(uuid())
-  firstName String
-  lastName String
+  firstName String?
+  lastName String?
   wallet String @unique 
-  ipfsHash String
+  ipfsHash String?
   kyc_requests KYC_Request[]
   cgp_requests CGP_Request[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  nonce String?
+
+  @@index([wallet])
  }
 
 model Admin{
   id String @unique @default(uuid())
-  firstName String
-  lastName String
-  company String @unique
+  firstName String?
+  lastName String?
+  company String? @unique
   wallet String @unique
   kyc_requests KYC_Request[]
   cgp_requests CGP_Request[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  nonce String?
+
+  @@index([wallet])
 }
 
 
@@ -60,7 +66,7 @@ model CGP_Request{  //change gas provider request
   status STATUS @default(PENDING)
   customerId String
   customer Customer @relation(fields:[customerId],references: [id])
-  oldGasCompany String
+  oldGasCompany String?
   new_adminId String
   new_admin Admin @relation(fields: [new_adminId],references: [id])
   approved_KYC_id String?
